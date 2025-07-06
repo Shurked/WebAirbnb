@@ -1,0 +1,12 @@
+# Ajustes generales
+* text=auto
+
+# Archivos específicos de demo
+demo/mvnw text eol=lf
+demo/*.cmd text eol=crlf
+demo/*.bat text eol=crlf
+
+# Binarios (no modificar)
+demo/*.jar binary
+demo/*.war binary
+demo/*.class binary

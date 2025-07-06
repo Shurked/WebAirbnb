@@ -1,0 +1,40 @@
+# Ignorar archivos de configuración sensibles
+demo/src/main/resources/application.yml
+demo/src/main/resources/application-dev.yml
+demo/src/main/resources/application-prod.yml
+
+### Spring Boot/Java ###
+demo/target/
+demo/.mvn/wrapper/maven-wrapper.jar
+!demo/**/src/main/**/target/
+!demo/**/src/test/**/target/
+
+### IDEs ###
+# General
+demo/.vscode/
+demo/.idea/
+demo/*.iml
+
+# STS/Eclipse
+demo/.apt_generated
+demo/.classpath
+demo/.factorypath
+demo/.project
+demo/.settings/
+demo/.springBeans
+demo/.sts4-cache
+
+# NetBeans
+demo/nbproject/private/
+demo/nbbuild/
+demo/dist/
+demo/nbdist/
+demo/.nb-gradle/
+demo/build/
+!demo/**/src/main/**/build/
+!demo/**/src/test/**/build/
+
+### Archivos generados ###
+demo/*.log
+demo/*.tmp
+demo/*.bak
