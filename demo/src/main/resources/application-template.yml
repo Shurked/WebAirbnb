@@ -1,0 +1,16 @@
+# application-template.yml (ejemplo/documentación)
+# Este archivo NO se carga automáticamente. Es solo una plantilla.
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/NOMBRE_BASE_DE_DATOS?useSSL=false&serverTimezone=UTC
+    username: USUARIO_MYSQL
+    password: CONTRASEÑA_MYSQL
+
+# Variables comunes para producción (ejemplo):
+DB_HOST: localhost
+DB_PORT: 3306
+DB_NAME: nombre_bd_produccion
+DB_USER: usuario_produccion
+DB_PASSWORD: contraseña_segura_produccion
+DB_SSL: true  # En producción debería ser true
