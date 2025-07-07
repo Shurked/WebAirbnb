@@ -1,40 +1,56 @@
-# Ignorar archivos de configuración sensibles
-demo/src/main/resources/application.yml
-demo/src/main/resources/application-dev.yml
-demo/src/main/resources/application-prod.yml
+# === Ajustes generales ===
+* text=auto
 
-### Spring Boot/Java ###
-demo/target/
-demo/.mvn/wrapper/maven-wrapper.jar
-!demo/**/src/main/**/target/
-!demo/**/src/test/**/target/
+# === Archivos específicos de backend/demo ===
+backend/demo/mvnw text eol=lf
+backend/demo/*.cmd text eol=crlf
+backend/demo/*.bat text eol=crlf
 
-### IDEs ###
-# General
-demo/.vscode/
-demo/.idea/
-demo/*.iml
+# === Binarios (no modificar) ===
+backend/demo/*.jar binary
+backend/demo/*.war binary
+backend/demo/*.class binary
 
-# STS/Eclipse
-demo/.apt_generated
-demo/.classpath
-demo/.factorypath
-demo/.project
-demo/.settings/
-demo/.springBeans
-demo/.sts4-cache
+# === Ignorar archivos de configuración sensibles ===
+backend/demo/src/main/resources/application.yml
+backend/demo/src/main/resources/application-dev.yml
+backend/demo/src/main/resources/application-prod.yml
 
-# NetBeans
-demo/nbproject/private/
-demo/nbbuild/
-demo/dist/
-demo/nbdist/
-demo/.nb-gradle/
-demo/build/
-!demo/**/src/main/**/build/
-!demo/**/src/test/**/build/
+# === Spring Boot / Java ===
+backend/demo/target/
+backend/demo/.mvn/wrapper/maven-wrapper.jar
+!backend/demo/**/src/main/**/target/
+!backend/demo/**/src/test/**/target/
 
-### Archivos generados ###
-demo/*.log
-demo/*.tmp
-demo/*.bak
+# === IDEs ===
+
+## VSCode
+backend/demo/.vscode/
+
+## IntelliJ IDEA
+backend/demo/.idea/
+backend/demo/*.iml
+
+## STS / Eclipse
+backend/demo/.apt_generated
+backend/demo/.classpath
+backend/demo/.factorypath
+backend/demo/.project
+backend/demo/.settings/
+backend/demo/.springBeans
+backend/demo/.sts4-cache
+
+## NetBeans
+backend/demo/nbproject/private/
+backend/demo/nbbuild/
+backend/demo/dist/
+backend/demo/nbdist/
+backend/demo/.nb-gradle/
+backend/demo/build/
+!backend/demo/**/src/main/**/build/
+!backend/demo/**/src/test/**/build/
+
+# === Archivos generados / temporales ===
+backend/demo/*.log
+backend/demo/*.tmp
+backend/demo/*.bak

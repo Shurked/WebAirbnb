@@ -1,6 +1,3 @@
-# Ajustes generales
-* text=auto
-
 # Archivos específicos de demo
 demo/mvnw text eol=lf
 demo/*.cmd text eol=crlf
