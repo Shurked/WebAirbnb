@@ -29,10 +29,16 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/auth/**").permitAll()  // Auth público
+                // Rutas públicas GET de accommodations
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/accommodations/featured").permitAll()
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/accommodations/search").permitAll()
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/accommodations/*").permitAll()
+                // Resto (incluido POST a /accommodations) requiere autenticación
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
 }
