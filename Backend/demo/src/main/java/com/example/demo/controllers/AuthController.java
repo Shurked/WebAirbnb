@@ -8,7 +8,7 @@ import com.example.demo.services.UserService;  // ✔️ Usa UserService
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthController {
     private final UserService userService;  // ✔️ Inyecta UserService
 

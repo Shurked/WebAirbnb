@@ -7,20 +7,21 @@ import com.example.demo.models.User;
 import com.example.demo.repositories.UserRepository; // 1. Importa el Repository
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.example.demo.security.JwtUtils; // 👈 Agrega esta importación
 
 @Service
 public class UserService {
     private final PasswordEncoder passwordEncoder;
-    private final UserRepository userRepository; // 2. Declara el Repository
+    private final UserRepository userRepository;
+    private final JwtUtils jwtUtils; // 👈 Nuevo campo inyectado
 
-    // 3. Inyecta ambos dependencias en el constructor
-    public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository) {
+    public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository, JwtUtils jwtUtils) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.jwtUtils = jwtUtils; // 👈 Inicializa
     }
 
     public AuthResponse login(LoginRequest request) {
-        // Lógica mejorada con validación
         User user = userRepository.findByEmail(request.getEmail())
             .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
@@ -28,18 +29,19 @@ public class UserService {
             throw new RuntimeException("Contraseña incorrecta");
         }
 
+        // ✅ Usar JwtUtils
+        String token = jwtUtils.generateToken(user.getEmail());
+
         AuthResponse response = new AuthResponse();
-        response.setToken("token_jwt_ejemplo");
+        response.setToken(token);
         response.setEmail(user.getEmail());
         response.setName(user.getName());
         return response;
     }
 
     public AuthResponse register(RegisterRequest request) {
-        // 1. Encriptar la contraseña
         String encodedPassword = passwordEncoder.encode(request.getPassword());
-        
-        // 2. Crear y guardar el usuario
+
         User user = new User();
         user.setEmail(request.getEmail());
         user.setPassword(encodedPassword);
@@ -47,9 +49,11 @@ public class UserService {
         user.setHost(false);
         userRepository.save(user);
 
-        // 3. Generar respuesta
+        // ✅ Generar token para nuevo usuario
+        String token = jwtUtils.generateToken(user.getEmail());
+
         AuthResponse response = new AuthResponse();
-        response.setToken("token_jwt_registro");
+        response.setToken(token);
         response.setEmail(user.getEmail());
         response.setName(user.getName());
         return response;
