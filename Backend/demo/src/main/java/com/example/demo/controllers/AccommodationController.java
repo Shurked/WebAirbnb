@@ -41,8 +41,9 @@ public class AccommodationController {
     @PostMapping
     public ResponseEntity<AccommodationDetailDto> createAccommodation(
             @Valid @RequestBody AccommodationRequest request,
-            Authentication authentication) {
-        return ResponseEntity.ok(accommodationService.createAccommodation(
-                request, authentication.getName()));
+            Authentication authentication) {   // Aquí recibes el usuario autenticado
+        String hostEmail = authentication.getName();  // Obtienes el email del usuario logueado
+        return ResponseEntity.ok(accommodationService.createAccommodation(request, hostEmail));
     }
+
 }

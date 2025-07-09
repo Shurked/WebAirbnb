@@ -1,6 +1,6 @@
 package com.example.demo.dtos.response;
 
-import com.example.demo.dtos.response.UserProfileDto;
+
 import lombok.Data;
 import java.util.List;
 
