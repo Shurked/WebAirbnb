@@ -8,6 +8,8 @@ import com.example.demo.repositories.UserRepository; // 1. Importa el Repository
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.demo.security.JwtUtils; // 👈 Agrega esta importación
+import org.springframework.transaction.annotation.Transactional; // 👈 Importa Transactional
+import com.example.demo.dtos.request.UpdateUserRequest; // Importa UpdateUserRequest
 
 @Service
 public class UserService {
@@ -58,4 +60,27 @@ public class UserService {
         response.setName(user.getName());
         return response;
     }
+
+    @Transactional 
+    public void deleteUserByEmail(String email) {
+        userRepository.deleteByEmail(email);
+    }
+
+    @Transactional
+    public void updateUser(String currentEmail, UpdateUserRequest request) {
+        User user = userRepository.findByEmail(currentEmail)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+        user.setHost(request.isHost());
+
+        if (request.getPassword() != null && !request.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
+
+        userRepository.save(user);
+    }
+
+
 }
