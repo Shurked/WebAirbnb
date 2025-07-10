@@ -9,6 +9,7 @@ import Register from './pages/Register';
 import Profile from './pages/Profile';
 import Bookings from './pages/Bookings';
 import Favorites from './pages/Favorites';
+import MyListings from './pages/MyListings'; 
 import { AppProvider } from './contexts/AppContext';
 
 function App() {
@@ -27,6 +28,8 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/bookings" element={<Bookings />} />
               <Route path="/favorites" element={<Favorites />} />
+              {/* Nueva ruta para Alojamientos */}
+              <Route path="/my-listings" element={<MyListings />} />
             </Routes>
           </main>
         </div>

@@ -1,22 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Star, Heart, MapPin, Users, Bed, Bath } from 'lucide-react';
+import { AccommodationCard as AccommodationCardType } from '../api/accommodationService';
 
 interface AccommodationCardProps {
-  accommodation: {
-    id: string;
-    title: string;
-    description: string;
-    price: number;
-    location: string;
-    images: string[];
-    rating: number;
-    reviews: number;
-    maxGuests: number;
-    bedrooms: number;
-    bathrooms: number;
-    type: string;
-  };
+  accommodation: AccommodationCardType;
 }
 
 export default function AccommodationCard({ accommodation }: AccommodationCardProps) {
@@ -25,7 +13,7 @@ export default function AccommodationCard({ accommodation }: AccommodationCardPr
       <div className="relative">
         <Link to={`/accommodation/${accommodation.id}`}>
           <img
-            src={accommodation.images[0]}
+            src={accommodation.mainImage}
             alt={accommodation.title}
             className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
           />

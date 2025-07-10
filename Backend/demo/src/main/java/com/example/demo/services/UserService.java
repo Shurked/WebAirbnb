@@ -5,6 +5,8 @@ import com.example.demo.dtos.request.RegisterRequest;
 import com.example.demo.dtos.response.AuthResponse;
 import com.example.demo.models.User;
 import com.example.demo.repositories.UserRepository; // 1. Importa el Repository
+
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.demo.security.JwtUtils; // 👈 Agrega esta importación
@@ -82,5 +84,23 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void toggleHost(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow();
+        user.setHost(!user.isHost());
+        userRepository.save(user);
+    }
+
+     public AuthResponse getUserInfo(String email) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+
+        AuthResponse response = new AuthResponse();
+        response.setToken(null);
+        response.setEmail(user.getEmail());
+        response.setName(user.getName());
+        response.setHost(user.isHost());
+
+        return response;
+    }
 
 }

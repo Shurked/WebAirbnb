@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
 
-interface User {
+export interface User {
   id: string;
   name: string;
   email: string;
@@ -94,6 +94,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
       return state;
   }
 }
+
 
 const AppContext = createContext<{
   state: AppState;

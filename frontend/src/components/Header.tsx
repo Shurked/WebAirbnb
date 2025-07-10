@@ -33,9 +33,15 @@ export default function Header() {
               Estancias
             </Link>
             {user && (
-              <Link to="/bookings" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
-                Mis Reservas
-              </Link>
+              <>
+                {/* --- Aquí agregué el link a Alojamientos --- */}
+                <Link to="/my-listings" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
+                  Alojamientos
+                </Link>
+                <Link to="/bookings" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
+                  Mis Reservas
+                </Link>
+              </>
             )}
           </nav>
 
@@ -67,6 +73,14 @@ export default function Header() {
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Perfil
+                    </Link>
+                    {/* --- Aquí agregué el link a Alojamientos en menú desplegable --- */}
+                    <Link
+                      to="/my-listings"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Alojamientos
                     </Link>
                     <Link
                       to="/bookings"
@@ -129,14 +143,24 @@ export default function Header() {
             >
               Stays
             </Link>
+            {/* --- Aquí agregué el link a Alojamientos en menú móvil --- */}
             {user && (
-              <Link
-                to="/bookings"
-                className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                My Bookings
-              </Link>
+              <>
+                <Link
+                  to="/my-listings"
+                  className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Alojamientos
+                </Link>
+                <Link
+                  to="/bookings"
+                  className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  My Bookings
+                </Link>
+              </>
             )}
           </div>
         </div>

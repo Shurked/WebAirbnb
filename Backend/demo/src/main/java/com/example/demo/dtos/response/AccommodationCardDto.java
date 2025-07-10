@@ -16,4 +16,5 @@ public class AccommodationCardDto {
     private int bedrooms;
     private int bathrooms;
     private String type;
+    private boolean active;
 }

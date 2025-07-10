@@ -111,9 +111,10 @@ public class AccommodationService {
             throw new RuntimeException("No autorizado para activar este alojamiento");
         }
 
-        accommodation.setActive(true); // Activar alojamiento
+        accommodation.setActive(!accommodation.isActive()); // Invertir estado
         accommodationRepository.save(accommodation);
     }
+
 
     private AccommodationCardDto convertToCardDto(Accommodation accommodation) {
         AccommodationCardDto dto = modelMapper.map(accommodation, AccommodationCardDto.class);
@@ -172,6 +173,40 @@ public class AccommodationService {
     accommodationRepository.save(acc);
 }
 
+    private AccommodationCardDto mapToCardDto(Accommodation a) {
+        AccommodationCardDto dto = new AccommodationCardDto();
+        dto.setId(a.getId());
+        dto.setTitle(a.getTitle());
+        dto.setDescription(a.getDescription());
+        dto.setPrice(a.getPrice());
+        dto.setLocation(a.getLocation());
+        dto.setMainImage(a.getImages().isEmpty() ? null : a.getImages().get(0));
+        dto.setRating(a.getRating());
+        dto.setReviews(a.getReviews());
+        dto.setMaxGuests(a.getMaxGuests());
+        dto.setBedrooms(a.getBedrooms());
+        dto.setBathrooms(a.getBathrooms());
+        dto.setType(a.getType());
+        dto.setActive(a.isActive()); // <-- asegurarse de esto
+        return dto;
+    }
+
+
+
+    public List<AccommodationCardDto> getAccommodationsByHost(String hostEmail) {
+        List<Accommodation> accommodations = accommodationRepository.findByHostEmail(hostEmail);
+        return accommodations.stream()
+            .map(accommodation -> mapToCardDto(accommodation))
+            .collect(Collectors.toList());
+    }
+
+
+    public List<AccommodationCardDto> getAllActiveAccommodations() {
+        return accommodationRepository.findByActiveTrue().stream()
+                .sorted((a1, a2) -> Double.compare(a2.getRating(), a1.getRating())) // ordena por rating desc
+                .map(this::mapToCardDto)
+                .collect(Collectors.toList());
+    }
 
 
 

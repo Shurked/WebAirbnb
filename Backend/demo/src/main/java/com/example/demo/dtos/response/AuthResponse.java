@@ -7,4 +7,5 @@ public class AuthResponse {
     private String token;  // JWT
     private String email;
     private String name;
+    private boolean isHost;
 }

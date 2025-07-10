@@ -26,9 +26,11 @@ public interface AccommodationRepository extends JpaRepository<Accommodation, Lo
 
     // (Opcional) Listar todos los alojamientos activos
     List<Accommodation> findByActiveTrue();
+    List<Accommodation> findByHostEmail(String email);
+
 
     @Query("SELECT a FROM Accommodation a WHERE a.rating >= :minRating AND a.reviews >= :minReviews AND a.isFeatured = true ORDER BY a.rating DESC")
        List<Accommodation> findFeaturedByRating(double minRating, int minReviews);
 
-
+       
 }

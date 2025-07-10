@@ -59,7 +59,7 @@ public class Accommodation {
     @Column(nullable = false)
     private boolean isFeatured = false;
 
-    @Column(nullable = false)
+    @Column( nullable = false)
     private boolean active = true;
 
     @OneToMany(mappedBy = "accommodation")

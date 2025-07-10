@@ -12,6 +12,7 @@ import com.example.demo.dtos.request.UpdateUserRequest; // ✔️ Importa Update
 
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin(origins = "http://localhost:5173") // Agregar esta línea
 public class AuthController {
     private final UserService userService;  // ✔️ Inyecta UserService
 
@@ -45,6 +46,17 @@ public class AuthController {
         userService.updateUser(currentEmail, request);
         return ResponseEntity.ok("Usuario actualizado correctamente");
     }
+    @PutMapping("/host/toggle")
+    public ResponseEntity<String> toggleHost(Authentication auth) {
+        String email = auth.getName();
+        userService.toggleHost(email);  // Cambia de true a false o viceversa
+        return ResponseEntity.ok("Estado de host actualizado");
+    }
 
+    @GetMapping("/me")
+    public AuthResponse getCurrentUser(Authentication authentication) {
+        String email = authentication.getName(); // El email viene del token JWT
+        return userService.getUserInfo(email);   // Devuelve nombre, email, isHost, etc.
+    }
 
 }

@@ -103,4 +103,18 @@ public class AccommodationController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/my")
+    public ResponseEntity<List<AccommodationCardDto>> getMyAccommodations(Authentication authentication) {
+        String hostEmail = authentication.getName();
+        List<AccommodationCardDto> myAccommodations = accommodationService.getAccommodationsByHost(hostEmail);
+        return ResponseEntity.ok(myAccommodations);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<AccommodationCardDto>> getAllActiveAccommodations() {
+        List<AccommodationCardDto> accommodations = accommodationService.getAllActiveAccommodations();
+        return ResponseEntity.ok(accommodations);
+    }
+
+
 }
