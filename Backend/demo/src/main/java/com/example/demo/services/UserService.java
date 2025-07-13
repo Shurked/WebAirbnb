@@ -6,12 +6,16 @@ import com.example.demo.dtos.response.AuthResponse;
 import com.example.demo.models.User;
 import com.example.demo.repositories.UserRepository; // 1. Importa el Repository
 
+import java.util.HashSet;
+
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.demo.security.JwtUtils; // 👈 Agrega esta importación
 import org.springframework.transaction.annotation.Transactional; // 👈 Importa Transactional
 import com.example.demo.dtos.request.UpdateUserRequest; // Importa UpdateUserRequest
+import java.util.Set;
+
 
 @Service
 public class UserService {
@@ -50,10 +54,19 @@ public class UserService {
         user.setEmail(request.getEmail());
         user.setPassword(encodedPassword);
         user.setName(request.getName());
-        user.setHost(false);
+        user.setPhone(request.getPhone());
+        user.setLocation(request.getLocation());
+        user.setBirthDate(request.getBirthDate());
+
+        Set<String> roles = new HashSet<>();
+        roles.add("ROLE_USER");
+        if (request.isHost()) {
+            roles.add("ROLE_HOST");
+        }
+        user.setRoles(roles);
+
         userRepository.save(user);
 
-        // ✅ Generar token para nuevo usuario
         String token = jwtUtils.generateToken(user.getEmail());
 
         AuthResponse response = new AuthResponse();
@@ -62,6 +75,7 @@ public class UserService {
         response.setName(user.getName());
         return response;
     }
+
 
     @Transactional 
     public void deleteUserByEmail(String email) {
@@ -75,32 +89,56 @@ public class UserService {
 
         user.setName(request.getName());
         user.setEmail(request.getEmail());
-        user.setHost(request.isHost());
+        user.setPhone(request.getPhone());
+        user.setLocation(request.getLocation());
+        user.setBirthDate(request.getBirthDate());
 
         if (request.getPassword() != null && !request.getPassword().isBlank()) {
             user.setPassword(passwordEncoder.encode(request.getPassword()));
         }
 
+        // Actualizar rol HOST según el booleano
+        if (request.isHost()) {
+            user.getRoles().add("ROLE_HOST");
+        } else {
+            user.getRoles().remove("ROLE_HOST");
+        }
+
         userRepository.save(user);
     }
+
 
     public void toggleHost(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow();
-        user.setHost(!user.isHost());
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Set<String> roles = user.getRoles();
+        if (roles.contains("ROLE_HOST")) {
+            roles.remove("ROLE_HOST");
+        } else {
+            roles.add("ROLE_HOST");
+        }
+
+        user.setRoles(roles);
         userRepository.save(user);
     }
 
-     public AuthResponse getUserInfo(String email) {
+
+    public AuthResponse getUserInfo(String email) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
         AuthResponse response = new AuthResponse();
-        response.setToken(null);
+        response.setToken(null); // solo para mostrar info
         response.setEmail(user.getEmail());
         response.setName(user.getName());
-        response.setHost(user.isHost());
+        response.setPhone(user.getPhone());
+        response.setLocation(user.getLocation());
+        response.setBirthDate(user.getBirthDate());
+        response.setRoles(user.getRoles());
 
         return response;
     }
+
 
 }

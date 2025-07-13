@@ -6,7 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class UserDetailsImpl implements UserDetails {
@@ -15,8 +15,11 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList(); // o agrega roles si tienes
+        return user.getRoles().stream()
+            .map(role -> (GrantedAuthority) () -> role)
+            .collect(Collectors.toList());
     }
+
 
     @Override
     public String getPassword() {
@@ -43,4 +46,6 @@ public class UserDetailsImpl implements UserDetails {
     public User getUser() {
         return user;
     }
+
+    
 }

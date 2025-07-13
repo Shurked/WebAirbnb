@@ -37,6 +37,8 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/accommodations/**").hasAnyRole("USER", "HOST")
+                .requestMatchers(HttpMethod.POST, "/accommodations").hasRole("HOST")
                 .requestMatchers(HttpMethod.GET, "/accommodations/featured").permitAll()
                 .requestMatchers(HttpMethod.GET, "/accommodations/search").permitAll()
                 .requestMatchers(HttpMethod.GET, "/accommodations/*").permitAll()
