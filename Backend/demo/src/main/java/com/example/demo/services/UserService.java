@@ -3,6 +3,7 @@ package com.example.demo.services;
 import com.example.demo.dtos.request.LoginRequest;
 import com.example.demo.dtos.request.RegisterRequest;
 import com.example.demo.dtos.response.AuthResponse;
+import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.models.User;
 import com.example.demo.repositories.UserRepository; // 1. Importa el Repository
 
@@ -15,6 +16,7 @@ import com.example.demo.security.JwtUtils; // 👈 Agrega esta importación
 import org.springframework.transaction.annotation.Transactional; // 👈 Importa Transactional
 import com.example.demo.dtos.request.UpdateUserRequest; // Importa UpdateUserRequest
 import java.util.Set;
+import java.util.List; // Importa List
 
 
 @Service
@@ -37,15 +39,20 @@ public class UserService {
             throw new RuntimeException("Contraseña incorrecta");
         }
 
-        // ✅ Usar JwtUtils
         String token = jwtUtils.generateToken(user.getEmail());
 
         AuthResponse response = new AuthResponse();
         response.setToken(token);
         response.setEmail(user.getEmail());
         response.setName(user.getName());
+        response.setPhone(user.getPhone());
+        response.setLocation(user.getLocation());
+        response.setBirthDate(user.getBirthDate());
+        response.setRoles(user.getRoles());  // Muy importante
+
         return response;
     }
+
 
     public AuthResponse register(RegisterRequest request) {
         String encodedPassword = passwordEncoder.encode(request.getPassword());
@@ -73,6 +80,8 @@ public class UserService {
         response.setToken(token);
         response.setEmail(user.getEmail());
         response.setName(user.getName());
+        response.setName(user.getName());
+        response.setRoles(user.getRoles()); // Incluir roles en la respuesta
         return response;
     }
 
@@ -138,6 +147,15 @@ public class UserService {
         response.setRoles(user.getRoles());
 
         return response;
+    }
+
+    @Transactional
+    public void updateUserRoles(String email, List<String> newRoles) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+        
+        user.setRoles(new HashSet<>(newRoles)); // Actualiza los roles
+        userRepository.save(user);
     }
 
 

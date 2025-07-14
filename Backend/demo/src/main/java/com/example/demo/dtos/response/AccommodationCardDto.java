@@ -10,6 +10,7 @@ public class AccommodationCardDto {
     private double price;
     private String location;
     private String mainImage;
+    private String hostName;
     private double rating;
     private int reviews;
     private int maxGuests;
@@ -17,4 +18,5 @@ public class AccommodationCardDto {
     private int bathrooms;
     private String type;
     private boolean active;
+    
 }

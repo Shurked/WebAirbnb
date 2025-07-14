@@ -1,14 +1,20 @@
 package com.example.demo.controllers;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 import com.example.demo.dtos.request.LoginRequest;
 import com.example.demo.dtos.request.RegisterRequest;
 import com.example.demo.dtos.response.AuthResponse;
 import com.example.demo.services.UserService;  // ✔️ Usa UserService
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
 import com.example.demo.dtos.request.UpdateUserRequest; // ✔️ Importa UpdateUserRequest
+import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
@@ -58,5 +64,25 @@ public class AuthController {
         String email = authentication.getName(); // El email viene del token JWT
         return userService.getUserInfo(email);   // Devuelve nombre, email, isHost, etc.
     }
+    @PutMapping("/roles/update")
+    public ResponseEntity<String> updateRoles(
+        @RequestParam String email,
+        @RequestParam List<String> newRoles,
+        Authentication authentication
+    ) {
+        // Obtener el email del usuario autenticado
+        String currentUserEmail = authentication.getName();
+        
+        // Opcional: Validar que el usuario solo pueda actualizar sus propios roles
+        // (si no quieres esto, elimina esta parte)
+        if (!currentUserEmail.equals(email)) {
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, 
+                "Solo puedes actualizar tus propios roles"
+            );
+        }
 
+        userService.updateUserRoles(email, newRoles);
+        return ResponseEntity.ok("Roles actualizados correctamente");
+    }
 }

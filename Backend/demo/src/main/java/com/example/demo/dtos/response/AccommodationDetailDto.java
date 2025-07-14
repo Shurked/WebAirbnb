@@ -11,7 +11,7 @@ public class AccommodationDetailDto {
     private String description;
     private double price;
     private String location;
-    private List<String> images;
+    private List<AccommodationImageDto> images; 
     private List<String> amenities;
     private double rating;
     private int reviews;

@@ -6,6 +6,7 @@ import java.time.LocalDate; // Importación para LocalDate
 import java.util.Set;      // Importación para Set
 import java.util.HashSet;  // Importación para HashSet
 
+
 @Entity
 @Data
 @Table(name = "users")

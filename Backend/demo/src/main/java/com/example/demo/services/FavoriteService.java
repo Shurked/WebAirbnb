@@ -11,6 +11,8 @@ import com.example.demo.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import java.util.Base64;
+
 
 import java.util.List;
 
@@ -36,17 +38,22 @@ public class FavoriteService {
                 );
     }
 
-    public List<AccommodationCardDto> getFavorites(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        public List<AccommodationCardDto> getFavorites(String email) {
+                User user = userRepository.findByEmail(email)
+                        .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        return favoriteRepository.findByUser(user).stream()
-                .map(Favorite::getAccommodation)
-                .map(accommodation -> {
-                    AccommodationCardDto dto = modelMapper.map(accommodation, AccommodationCardDto.class);
-                    dto.setMainImage(accommodation.getImages().isEmpty() ? "" : accommodation.getImages().get(0));
-                    return dto;
-                })
-                .toList();
-    }
+                return favoriteRepository.findByUser(user).stream()
+                        .map(Favorite::getAccommodation)
+                        .map(accommodation -> {
+                        AccommodationCardDto dto = modelMapper.map(accommodation, AccommodationCardDto.class);
+                        // Convertir AccommodationImage a Base64
+                        dto.setMainImage(
+                                accommodation.getImages().isEmpty() ? 
+                                "" : 
+                                Base64.getEncoder().encodeToString(accommodation.getImages().get(0).getData())
+                        );
+                        return dto;
+                        })
+                        .toList();
+        }
 }

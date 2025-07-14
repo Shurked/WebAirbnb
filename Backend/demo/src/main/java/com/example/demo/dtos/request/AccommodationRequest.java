@@ -9,7 +9,6 @@ public class AccommodationRequest {
     private String description;
     private double price;
     private String location;
-    private List<String> images;
     private List<String> amenities;
     private int maxGuests;
     private int bedrooms;

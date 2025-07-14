@@ -21,7 +21,6 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final AccommodationRepository accommodationRepository;
     private final UserRepository userRepository;
-    private final ModelMapper modelMapper;
 
     public BookingResponse createBooking(BookingRequest request, String userEmail) {
         User user = userRepository.findByEmail(userEmail)

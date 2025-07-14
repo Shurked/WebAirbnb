@@ -2,6 +2,8 @@ package com.example.demo.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,10 +26,8 @@ public class Accommodation {
     @Column(nullable = false)
     private String location;
 
-    @ElementCollection
-    @CollectionTable(name = "accommodation_images", joinColumns = @JoinColumn(name = "accommodation_id"))
-    @Column(name = "image_url")
-    private List<String> images;
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AccommodationImage> images = new ArrayList<>();
 
     @ElementCollection
     @CollectionTable(name = "accommodation_amenities", joinColumns = @JoinColumn(name = "accommodation_id"))
