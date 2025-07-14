@@ -3,6 +3,7 @@ package com.example.demo.controllers;
 import com.example.demo.dtos.request.AccommodationRequest;
 import com.example.demo.dtos.response.AccommodationCardDto;
 import com.example.demo.dtos.response.AccommodationDetailDto;
+import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.services.AccommodationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +14,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+
+import com.example.demo.models.Accommodation;
+import com.example.demo.models.AccommodationImage;
 import com.example.demo.models.User;
+import com.example.demo.repositories.AccommodationImageRepository;
+import com.example.demo.repositories.AccommodationRepository;
 import com.example.demo.security.UserDetailsImpl;
+import java.io.IOException;
 
 import org.springframework.http.MediaType;
 
@@ -26,6 +33,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccommodationController {
     private final AccommodationService accommodationService;
+    private final AccommodationRepository accommodationRepository;
+    private final AccommodationImageRepository accommodationImageRepository;
+
+
+    
+
 
     // Endpoints GET (sin cambios)
     @GetMapping("/featured")
@@ -125,6 +138,29 @@ public class AccommodationController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/{accommodationId}/images")
+    public ResponseEntity<?> uploadAccommodationImage(
+            @PathVariable Long accommodationId,
+            @RequestParam("image") MultipartFile file) {
+        try {
+            Accommodation accommodation = accommodationRepository.findById(accommodationId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Accommodation not found"));
+
+            AccommodationImage image = new AccommodationImage();
+            image.setContentType(file.getContentType());
+            image.setData(file.getBytes());
+            image.setAccommodation(accommodation);
+
+            accommodationImageRepository.save(image);
+
+            return ResponseEntity.ok("Image uploaded successfully");
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error uploading image");
+        }
+    }
+
+
     // Método privado para manejo centralizado de creación
     private ResponseEntity<AccommodationDetailDto> handleAccommodationCreation(
             AccommodationRequest request,
@@ -147,5 +183,8 @@ public class AccommodationController {
                 accommodationService.createAccommodation(request, user.getEmail())
             );
         }
+
+    
+
     }
 }

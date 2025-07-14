@@ -42,6 +42,20 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/accommodations/featured").permitAll()
                 .requestMatchers(HttpMethod.GET, "/accommodations/search").permitAll()
                 .requestMatchers(HttpMethod.GET, "/accommodations/*").permitAll()
+
+                .requestMatchers(HttpMethod.GET, "/favorites/**").hasRole("USER")
+                .requestMatchers(HttpMethod.POST, "/favorites/**").hasRole("USER")
+                .requestMatchers(HttpMethod.DELETE, "/favorites/**").hasRole("USER")
+
+                .requestMatchers(HttpMethod.GET, "/bookings/**").hasRole("USER")
+                .requestMatchers(HttpMethod.POST, "/bookings/**").hasRole("USER")
+                .requestMatchers(HttpMethod.DELETE, "/bookings/**").hasRole("USER")
+
+                .requestMatchers(HttpMethod.GET, "/tours/location").permitAll()
+                .requestMatchers(HttpMethod.GET, "/tours/host").permitAll()
+                .requestMatchers(HttpMethod.POST, "/tours").hasRole("HOST")
+                .requestMatchers(HttpMethod.DELETE, "/tours/**").hasRole("HOST")
+                .requestMatchers(HttpMethod.POST, "/tours/*/images").hasRole("HOST")
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);

@@ -1,7 +1,6 @@
 package com.example.demo.controllers;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import com.example.demo.dtos.request.LoginRequest;
 import com.example.demo.dtos.request.RegisterRequest;

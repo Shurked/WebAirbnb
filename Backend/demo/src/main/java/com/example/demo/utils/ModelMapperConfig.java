@@ -81,6 +81,21 @@ public class ModelMapperConfig {
                 }, AccommodationCardDto::setMainImage);
             });
 
+        // Mapeo TourImage → TourImageDto (nuevo)
+        modelMapper.typeMap(TourImage.class, TourImageDto.class)
+            .addMappings(mapper -> {
+                mapper.using(byteArrayToBase64)
+                      .map(TourImage::getData, TourImageDto::setImagesBase64);
+                mapper.map(TourImage::getContentType, TourImageDto::setContentType);
+            });
+
+        // Mapeo TourService → TourServiceResponse (nuevo)
+        modelMapper.typeMap(TourService.class, TourServiceResponse.class)
+            .addMappings(mapper -> {
+                mapper.map(src -> src.getHost().getName(), TourServiceResponse::setHostName);
+                // Las imágenes se mapean automáticamente a TourImageDto
+            });
+
         return modelMapper;
     }
 }
