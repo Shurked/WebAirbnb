@@ -56,6 +56,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/tours").hasRole("HOST")
                 .requestMatchers(HttpMethod.DELETE, "/tours/**").hasRole("HOST")
                 .requestMatchers(HttpMethod.POST, "/tours/*/images").hasRole("HOST")
+
+                .requestMatchers( "/trip-plans/**").hasAnyRole("USER", "HOST")
+                .requestMatchers( "/travel-routes").hasAnyRole("USER", "HOST")
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
